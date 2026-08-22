@@ -15,13 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract launcher ZIP
-        run: |
-          mkdir source
-          unzip -q LiquidGlassLauncher*.zip -d source
-          echo "Files extracted:"
-          find source -maxdepth 3 -type f | head -50
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -30,8 +23,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.9'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -41,20 +32,16 @@ jobs:
 
       - name: Enable AndroidX
         run: |
-          mkdir -p source
-          echo "android.useAndroidX=true" >> source/gradle.properties
-          echo "android.enableJetifier=true" >> source/gradle.properties
+          echo "android.useAndroidX=true" >> gradle.properties
+          echo "android.enableJetifier=true" >> gradle.properties
 
       - name: Build APK
         run: |
-          PROJECT_DIR=$(dirname "$(find source -name gradlew -type f | head -n1)")
-          echo "Project: $PROJECT_DIR"
-          chmod +x "$PROJECT_DIR/gradlew"
-          cd "$PROJECT_DIR"
+          chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: LiquidGlassLauncher-APK
-          path: source/**/app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
