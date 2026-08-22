@@ -1,3 +1,4 @@
+ 
 name: Build APK
 
 on:
@@ -45,15 +46,15 @@ jobs:
           touch source/gradle.properties
           echo "android.useAndroidX=true" >> source/gradle.properties
           echo "android.enableJetifier=true" >> source/gradle.properties
-          cat source/gradle.properties
 
       - name: Build APK
         working-directory: source
-        run: ./gradlew assembleDebug --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: LiquidGlassLauncher-APK
           path: source/app/build/outputs/apk/debug/app-debug.apk
-          
