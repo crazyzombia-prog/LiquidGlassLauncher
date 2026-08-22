@@ -39,10 +39,14 @@ jobs:
         run: |
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Build APK
-        working-directory: source
-        run: gradle assembleDebug --no-daemon
+      - name: Enable AndroidX
+  run: |
+    echo "android.useAndroidX=true" >> source/gradle.properties
+    echo "android.enableJetifier=true" >> source/gradle.properties
 
+- name: Build APK
+  working-directory: source
+  run: gradle assembleDebug --no-daemon
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
