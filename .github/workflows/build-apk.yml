@@ -39,7 +39,7 @@ jobs:
         run: |
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-            - name: Enable AndroidX
+      - name: Enable AndroidX
         run: |
           mkdir -p source
           touch source/gradle.properties
@@ -56,3 +56,4 @@ jobs:
         with:
           name: LiquidGlassLauncher-APK
           path: source/app/build/outputs/apk/debug/app-debug.apk
+          
